@@ -29,12 +29,12 @@ $ErrorActionPreference = "Stop"
 # Check and install required module
 function Install-RequiredModule {
     if (!(Get-Module -ListAvailable -Name PSWindowsUpdate)) {
-        Write-Host "Installing PSWindowsUpdate module..." -ForegroundColor Cyan
+        Update-StatusBox -Message "Installing PSWindowsUpdate module..." -Color "Cyan"
         try {
             Install-Module PSWindowsUpdate -Force -Confirm:$false
-            Write-Host "PSWindowsUpdate module installed successfully!" -ForegroundColor Green
+            Update-StatusBox -Message "PSWindowsUpdate module installed successfully!" -Color "Green"
         } catch {
-            Write-Host "Failed to install PSWindowsUpdate module. Error: $_" -ForegroundColor Red
+            Update-StatusBox -Message "Failed to install PSWindowsUpdate module. Error: $_" -Color "Red"
             exit
         }
     }
@@ -217,16 +217,14 @@ $cancelButton.Add_Click({
     $cancelButton.Enabled = $false
 })
 
-# Add controls to form
-$form.Controls.AddRange(@(
-    $headerPanel,
-    $statusBox,
-    $progressBar,
-    $quickInstallBox,
-    $copyButton,
-    $startButton,
-    $cancelButton
-))
+# Add controls to the form
+$form.Controls.Add($headerPanel)
+$form.Controls.Add($statusBox)
+$form.Controls.Add($progressBar)
+$form.Controls.Add($quickInstallBox)
+$form.Controls.Add($copyButton)
+$form.Controls.Add($startButton)
+$form.Controls.Add($cancelButton)
 
 # Show the form
-[System.Windows.Forms.Application]::Run($form)
+$form.ShowDialog()
